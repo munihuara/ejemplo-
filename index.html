@@ -4,41 +4,107 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Validación de Documento - SEM</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        body { margin: 0; font-family: 'Roboto', sans-serif; background: linear-gradient(135deg, #007BFF, #00C6FF); display: flex; justify-content: center; align-items: center; min-height: 100vh; color: #333; transition: background 0.3s ease; }
+        .container { background: #fff; padding: 30px; border-radius: 16px; box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2); max-width: 450px; width: 100%; text-align: center; animation: fadeIn 1.5s ease-in-out; position: relative; transform: scale(0.9); margin-top: 10px; }
+        .container.show { transform: scale(1); }
+        .highlight { font-weight: 700; color: #007BFF; }
+        .btn { margin-top: 20px; display: inline-block; font-size: 16px; font-weight: 500; color: #fff; background: #007BFF; padding: 12px 24px; border-radius: 30px; cursor: pointer; transition: all 0.3s ease; }
+        .btn:hover { background: #0056b3; transform: translateY(-3px); }
+        .qr-code img { width: 120px; height: 120px; border-radius: 8px; box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2); }
+        .dark-mode-toggle { position: absolute; top: 20px; right: 20px; cursor: pointer; font-size: 20px; color: #fff; }
+        .notificacion { display: none; background: red; color: white; padding: 10px; border-radius: 5px; margin-top: 15px; }
+        .historial { margin-top: 20px; text-align: left; background: #f1f1f1; padding: 10px; border-radius: 10px; }
+    </style>
 </head>
 <body>
     <i class="fas fa-moon dark-mode-toggle" onclick="toggleDarkMode()" title="Cambiar tema"></i>
-
+    
     <div class="container">
         <h1>Validación de Documento</h1>
-        <div class="status-card">Estado: <span class="highlight">PAGADO</span></div>
+        <p>Estado: <span class="highlight" id="estado">PAGADO</span></p>
+        <p><span class="highlight">Permisos de Circulación - Vehículos Livianos</span></p>
+        <p>Emitido por: <span class="highlight">MUNICIPALIDAD DE HUARA</span></p>
+        <p>Nro. Serie: <span class="highlight">2025003</span></p>
+        <p>Código de Verificación: <span class="highlight">018472187003</span></p>
         
-        <div class="info-section">
-            <div class="info-item"><span>Permiso:</span> <span class="highlight">Vehículos Livianos</span></div>
-            <div class="info-item"><span>Municipalidad:</span> <span class="highlight">HUARA</span></div>
-            <div class="info-item"><span>Nro. Serie:</span> <span class="highlight">2025003</span></div>
-            <div class="info-item"><span>Verificación:</span> <span class="highlight">018472187003</span></div>
-        </div>
-
         <div class="qr-code">
-            <img src="https://api.qrserver.com/v1/create-qr-code/?size=130x130&data=https://munihuara.github.io/validador.cl/" alt="Código QR">
+            <img src="https://api.qrserver.com/v1/create-qr-code/?size=120x120&data=https://munihuara.github.io/validador.cl/" alt="Código QR para validar el documento">
         </div>
 
-        <a href="https://munihuara.github.io/validador.cl" class="btn" target="_blank">Validar Documento</a>
+        <p>Valide en: <a href="https://munihuara.github.io/validador.cl" class="btn" target="_blank" rel="noopener noreferrer">Click Aquí</a></p>
+        
+        <p>Patente: <span class="highlight">TDYR42-0</span></p>
+        <p>Vehículo: <span class="highlight">TOYOTA YARIS CROSS</span></p>
+        <p>Propietario: <span class="highlight">ALEJANDRO ANTONIO CELIS PALMA</span></p>
+        <p>Vencimiento: <span class="highlight" id="fecha-vencimiento">31-03-2026</span></p>
+        <p>Neto: <span class="highlight">$360.278</span></p>
+        <p>Último acceso: <span id="last-access"></span></p>
 
-        <div class="info-section">
-            <div class="info-item"><span>Patente:</span> <span class="highlight">TDYR42-0</span></div>
-            <div class="info-item"><span>Vehículo:</span> <span class="highlight">TOYOTA YARIS CROSS</span></div>
-            <div class="info-item"><span>Propietario:</span> <span class="highlight">ALEJANDRO CELIS PALMA</span></div>
-            <div class="info-item"><span>Vencimiento:</span> <span class="highlight">31-03-2026</span></div>
-            <div class="info-item"><span>Neto:</span> <span class="highlight">$360.278</span></div>
-            <div class="info-item"><span>Último acceso:</span> <span id="last-access">Cargando...</span></div>
+        <div class="notificacion" id="notificacion">¡Atención! Su documento ha caducado.</div>
+
+        <div class="historial">
+            <h3>Historial de Validaciones</h3>
+            <ul id="historial-lista"></ul>
         </div>
 
         <a href="mailto:munihuaraqr@gmail.com" class="btn">Contacto</a>
     </div>
 
-    <script src="script.js"></script>
+    <script>
+        function toggleDarkMode() {
+            document.body.classList.toggle('dark');
+        }
+
+        function updateLastAccess() {
+            const lastAccessElement = document.getElementById('last-access');
+            const now = new Date();
+            lastAccessElement.textContent = now.toLocaleString();
+            localStorage.setItem('lastAccess', now);
+        }
+
+        function checkExpiration() {
+            const fechaVencimiento = new Date("2026-03-31");
+            const hoy = new Date();
+            if (hoy > fechaVencimiento) {
+                document.getElementById('notificacion').style.display = 'block';
+            }
+        }
+
+        function actualizarEstado() {
+            const estados = ["PAGADO", "EN PROCESO", "VENCIDO"];
+            const estadoActual = estados[Math.floor(Math.random() * estados.length)];
+            document.getElementById("estado").textContent = estadoActual;
+        }
+
+        function actualizarHistorial() {
+            let historial = JSON.parse(localStorage.getItem("historial")) || [];
+            const nuevoRegistro = {
+                fecha: new Date().toLocaleString(),
+                estado: document.getElementById("estado").textContent
+            };
+
+            historial.push(nuevoRegistro);
+            localStorage.setItem("historial", JSON.stringify(historial));
+
+            const historialLista = document.getElementById("historial-lista");
+            historialLista.innerHTML = "";
+            historial.forEach(registro => {
+                let item = document.createElement("li");
+                item.textContent = `${registro.fecha} - Estado: ${registro.estado}`;
+                historialLista.appendChild(item);
+            });
+        }
+
+        document.addEventListener("DOMContentLoaded", function() {
+            updateLastAccess();
+            checkExpiration();
+            actualizarEstado();
+            actualizarHistorial();
+            setInterval(actualizarEstado, 10000);
+        });
+    </script>
 </body>
 </html>
