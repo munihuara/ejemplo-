@@ -1,73 +1,61 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Validación de Documento - SEM</title>
-    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-    <style>
-        body { margin: 0; font-family: 'Roboto', sans-serif; background: linear-gradient(135deg, #007BFF, #00C6FF); display: flex; justify-content: center; align-items: center; min-height: 100vh; color: #333; transition: background 0.3s ease; }
-        .container { background: #fff; padding: 30px; border-radius: 16px; box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2); max-width: 450px; width: 100%; text-align: center; animation: fadeIn 1.5s ease-in-out; position: relative; transform: scale(0.9); margin-top: 10px; }
-        .container.show { transform: scale(1); }
-        .container h1 { font-size: 30px; margin-bottom: 20px; color: #007BFF; text-transform: uppercase; letter-spacing: 2px; animation: bounce 2s infinite; }
-        .container p { font-size: 16px; margin: 8px 0; line-height: 1.6; }
-        .highlight { font-weight: 700; color: #007BFF; }
-        .btn { margin-top: 20px; display: inline-block; text-decoration: none; font-size: 16px; font-weight: 500; color: #fff; background: #007BFF; padding: 12px 24px; border-radius: 30px; transition: all 0.3s ease; box-shadow: 0 4px 12px rgba(0, 123, 255, 0.5); cursor: pointer; }
-        .btn:hover { background: #0056b3; box-shadow: 0 6px 18px rgba(0, 123, 255, 0.7); transform: translateY(-3px); }
-        .btn:active { transform: translateY(0); }
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Valide su permiso de circulación de manera rápida y sencilla en la Municipalidad de Huara.">
+  <title>Verificador de Códigos | Municipalidad de Huara</title>
+
+  <style>
+    * {
+      user-select: none;
+      -webkit-user-select: none;
+      -moz-user-select: none;
+      -ms-user-select: none;
+    }
+    body {
+      display: none;
+    }
+  </style>
+
+  <script>
+    document.addEventListener("DOMContentLoaded", function () {
+      document.body.style.display = "block";
+    });
+    
+    document.addEventListener("contextmenu", function (event) {
+      event.preventDefault();
+    });
+
+    document.onkeydown = function (e) {
+      if (e.keyCode == 123 || (e.ctrlKey && e.shiftKey && (e.keyCode == 'I'.charCodeAt(0) || e.keyCode == 'J'.charCodeAt(0))) || (e.ctrlKey && e.keyCode == 'U'.charCodeAt(0))) {
+        return false;
+      }
+    };
+  </script>
 </head>
-<body oncontextmenu="return false;">
-    <i class="fas fa-moon dark-mode-toggle" onclick="toggleDarkMode()" title="Cambiar tema"></i>
-    <div class="container">
-        <h1>Validación de Documento</h1>
-        <div class="progress-bar"><div></div></div>
-        <p>Estado: <span class="highlight">PAGADO</span></p>
-        <p><span class="highlight">Permisos de Circulación - Vehículos Livianos</span></p>
-        <p>Emitido por: <span class="highlight">MUNICIPALIDAD DE HUARA</span></p>
-        <p>Nro. Serie: <span class="highlight">2025008</span></p>
-        <p>Código de Verificación: <span class="highlight">018472187008</span></p>
-        <div class="qr-code">
-            <img src="https://api.qrserver.com/v1/create-qr-code/?size=120x120&data=https://munihuara.github.io/validador.cl/" alt="Código QR para validar el documento">
-        </div>
-        <p>Valide en: <a href="https://munihuara.github.io/validador.cl" class="btn" target="_blank" rel="noopener noreferrer">Click Aquí</a></p>
-        <p>Patente: <span class="highlight">TD4862-2</span></p>
-        <p>Vehículo: <span class="highlight">CHEVROLET LUV SLX D CAB 2.2</span></p>
-        <p>Propietario: <span class="highlight">FABIOLA ALEJANDRA PLAZA VILLALON</span></p>
-        <p>Vencimiento: <span class="highlight">31-03-2026</span></p>
-        <p>Neto: <span class="highlight">$33.715</span></p>
-        <p>Último acceso: <span id="last-access">03-02-2025, 1:09:17 p. m.</span></p>
-        <a href="mailto:munihuaraqr@gmail.com" class="btn">Contacto</a>
-    </div>
+<body>
+  <div class="container">
+    <h1>Municipalidad de Huara</h1>
+    <p>Ingrese el código de validación:</p>
+    <input type="text" id="codeInput" placeholder="Ej: ABC123">
+    <button onclick="checkCode()">Verificar Código</button>
+    <div id="result"></div>
+  </div>
 
-    <script>
-        function toggleDarkMode() {
-            document.body.classList.toggle('dark');
-        }
+  <script>
+    function checkCode() {
+      const validCodes = ["1A8F4NC9MX2", "7H5H8B3V7N4", "8KJDN29VK38V"];
+      const inputCode = document.getElementById("codeInput").value.trim();
+      const resultElement = document.getElementById("result");
 
-        // Bloquear herramientas de desarrollo (F12, Ctrl+Shift+I, Ctrl+Shift+J, Ctrl+U)
-        document.addEventListener('keydown', function (event) {
-            if (event.key === "F12" || (event.ctrlKey && event.shiftKey && (event.key === "I" || event.key === "J")) || (event.ctrlKey && event.key === "U")) {
-                event.preventDefault();
-            }
-        });
+      resultElement.style.display = "block";
+      resultElement.textContent = "Verificando código...";
 
-        // Bloquear clic derecho
-        document.addEventListener('contextmenu', function (event) {
-            event.preventDefault();
-        });
-
-        // Actualizar la fecha del último acceso
-        function updateLastAccess() {
-            const lastAccessElement = document.getElementById('last-access');
-            const now = new Date();
-            lastAccessElement.textContent = now.toLocaleString();
-            localStorage.setItem('lastAccess', now);
-        }
-
-        // Llamar a la función al cargar la página
-        document.addEventListener('DOMContentLoaded', updateLastAccess);
-    </script>
+      setTimeout(() => {
+        resultElement.textContent = validCodes.includes(inputCode) ? "PERMISO VÁLIDO" : "PERMISO INVÁLIDO";
+      }, 2000);
+    }
+  </script>
 </body>
 </html>
