@@ -10,12 +10,28 @@
 
   <!-- Google Fonts -->
   <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
-
+  
   <!-- Font Awesome Icons -->
   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
 
-  <!-- Archivo CSS externo -->
-  <link rel="stylesheet" type="text/css" href="styles.css">
+  <!-- Enlace al archivo CSS externo -->
+  <link rel="stylesheet" href="styles.css">
+
+  <script>
+    document.addEventListener("DOMContentLoaded", function () {
+      document.body.style.display = "block";
+    });
+
+    document.addEventListener("contextmenu", function (event) {
+      event.preventDefault();
+    });
+
+    document.onkeydown = function (e) {
+      if (e.keyCode == 123 || (e.ctrlKey && e.shiftKey && (e.keyCode == 'I'.charCodeAt(0) || e.keyCode == 'J'.charCodeAt(0))) || (e.ctrlKey && e.keyCode == 'U'.charCodeAt(0))) {
+        return false;
+      }
+    };
+  </script>
 </head>
 <body>
   <div class="container">
@@ -26,26 +42,26 @@
     <div id="result"></div>
   </div>
 
-  <div class="section">
-    <h2>Contáctenos</h2>
-    <p>Si necesitas asistencia, <a href="mailto:munihuaraqr@gmail.com" style="color: #1e88e5; text-decoration: none; font-weight: 600;">haz clic aquí</a>.</p>
-  </div>
+  <script>
+    const validCodes = ["1A8F4NC9MX2", "7H5H8B3V7N4", "8KJDN29VK38V"];
 
-  <div class="section">
-    <h2>Preguntas Frecuentes</h2>
-    <div class="faq">
-      <div class="faq-item">
-        <h3 onclick="toggleFAQ(this)">¿Qué es el permiso de circulación?</h3>
-        <p>El permiso de circulación es un documento obligatorio que autoriza a un vehículo a transitar por las vías públicas del país. Es emitido por las municipalidades y debe renovarse anualmente.</p>
-      </div>
-      <div class="faq-item">
-        <h3 onclick="toggleFAQ(this)">¿Qué es el código de verificación del permiso de circulación?</h3>
-        <p>El código de verificación es un número único que emite la Municipalidad de Huara para cada permiso de circulación. Este código permite validar la autenticidad del permiso de manera rápida y sencilla. Además, se puede validar utilizando un código QR.</p>
-      </div>
-      <div class="faq-item">
-        <h3 onclick="toggleFAQ(this)">¿Dónde puedo encontrar el código de verificación en mi permiso de circulación?</h3>
-        <p>El código de verificación generalmente se encuentra impreso en la parte inferior o en un área destacada del permiso de circulación emitido por la Municipalidad de Huara. La página web donde se valida el permiso sale impresa en el documento y también aparece al escanear el código QR.</p>
-      </div>
-      <div class="faq-item">
-        <h3 onclick="toggleFAQ(this)">¿Cómo puedo validar mi permiso de circulación usando el código de verificación?</h3>
-        <p>Para validar tu permiso de circulación, puedes ingresar al enlace que aparece impreso en el permiso o escanear el código
+    function checkCode() {
+      const inputCode = document.getElementById("codeInput").value.trim();
+      const resultElement = document.getElementById("result");
+
+      resultElement.style.display = "block";
+      resultElement.textContent = "Verificando código, por favor espere...";
+
+      setTimeout(() => {
+        if (validCodes.includes(inputCode)) {
+          resultElement.textContent = "PERMISO DE CIRCULACIÓN VÁLIDO";
+          resultElement.className = "valid";
+        } else {
+          resultElement.textContent = "PERMISO DE CIRCULACIÓN NO EXISTE";
+          resultElement.className = "invalid";
+        }
+      }, 2000);
+    }
+  </script>
+</body>
+</html>
