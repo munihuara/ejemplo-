@@ -1,9 +1,10 @@
+<!DOCTYPE html>
 <html lang="es">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Validación de Documento - SEM</title>
-    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&amp;display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
         body { margin: 0; font-family: 'Roboto', sans-serif; background: linear-gradient(135deg, #007BFF, #00C6FF); display: flex; justify-content: center; align-items: center; min-height: 100vh; color: #333; transition: background 0.3s ease; }
@@ -15,59 +16,47 @@
         .btn { margin-top: 20px; display: inline-block; text-decoration: none; font-size: 16px; font-weight: 500; color: #fff; background: #007BFF; padding: 12px 24px; border-radius: 30px; transition: all 0.3s ease; box-shadow: 0 4px 12px rgba(0, 123, 255, 0.5); cursor: pointer; }
         .btn:hover { background: #0056b3; box-shadow: 0 6px 18px rgba(0, 123, 255, 0.7); transform: translateY(-3px); }
         .btn:active { transform: translateY(0); }
-        .footer { margin-top: 20px; font-size: 14px; color: #666; }
-        .qr-code { margin: 20px 0; transition: transform 0.3s ease-in-out; }
-        .qr-code:hover { transform: scale(1.1); }
-        .qr-code img { width: 120px; height: 120px; border-radius: 8px; box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2); }
-        .dark-mode-toggle { position: absolute; top: 20px; right: 20px; cursor: pointer; font-size: 20px; color: #fff; transition: color 0.3s ease; }
-        .dark-mode-toggle:hover { color: #ffeb3b; }
-        body.dark { background: linear-gradient(135deg, #2c3e50, #34495e); color: #f4f4f4; }
-        body.dark .container { background: #444; color: #fff; }
-        body.dark .btn { background: #ff5722; box-shadow: 0 4px 12px rgba(255, 87, 34, 0.5); }
-        body.dark .btn:hover { background: #e64a19; box-shadow: 0 6px 18px rgba(255, 87, 34, 0.7); }
         @keyframes fadeIn { from { opacity: 0; transform: scale(0.9); } to { opacity: 1; transform: scale(1); } }
         @keyframes bounce { 0%, 20%, 50%, 80%, 100% { transform: translateY(0); } 40% { transform: translateY(-20px); } 60% { transform: translateY(-10px); } }
     </style>
 </head>
-<body>
+<body oncontextmenu="return false;">
     <i class="fas fa-moon dark-mode-toggle" onclick="toggleDarkMode()" title="Cambiar tema"></i>
     <div class="container">
         <h1>Validación de Documento</h1>
         <p>Estado: <span class="highlight">PAGADO</span></p>
+        <p><span class="highlight">Permisos de Circulación - Vehículos Livianos</span></p>
         <p>Emitido por: <span class="highlight">MUNICIPALIDAD DE HUARA</span></p>
+        <p>Nro. Serie: <span class="highlight">2025008</span></p>
+        <p>Código de Verificación: <span class="highlight">018472187008</span></p>
         <div class="qr-code">
-            <img src="https://api.qrserver.com/v1/create-qr-code/?size=120x120&amp;data=https://munihuara.github.io/validador.cl/" alt="Código QR">
+            <img src="https://api.qrserver.com/v1/create-qr-code/?size=120x120&data=https://munihuara.github.io/validador.cl/" alt="Código QR para validar el documento">
         </div>
         <p>Valide en: <a href="https://munihuara.github.io/validador.cl" class="btn" target="_blank" rel="noopener noreferrer">Click Aquí</a></p>
+        <p>Patente: <span class="highlight">TD4862-2</span></p>
+        <p>Vehículo: <span class="highlight">CHEVROLET LUV SLX D CAB 2.2</span></p>
+        <p>Propietario: <span class="highlight">FABIOLA ALEJANDRA PLAZA VILLALON</span></p>
+        <p>Vencimiento: <span class="highlight">31-03-2026</span></p>
+        <p>Neto: <span class="highlight">$33.715</span></p>
+        <a href="mailto:munihuaraqr@gmail.com" class="btn">Contacto</a>
     </div>
 
     <script>
-    (function() {
-        document.addEventListener("contextmenu", function(e) {
-            e.preventDefault();
-        });
-
-        document.addEventListener("keydown", function(e) {
-            if (e.key === "F12" || (e.ctrlKey && e.shiftKey && e.key === "I") || (e.ctrlKey && e.shiftKey && e.key === "J") || (e.ctrlKey && e.key === "U")) {
-                e.preventDefault();
-            }
-        });
-
         function toggleDarkMode() {
             document.body.classList.toggle('dark');
         }
 
-        function updateLastAccess() {
-            const lastAccessElement = document.getElementById('last-access');
-            if (lastAccessElement) {
-                const now = new Date();
-                lastAccessElement.textContent = now.toLocaleString();
-                localStorage.setItem('lastAccess', now);
+        // Bloquear teclas F12, Ctrl+Shift+I, Ctrl+Shift+J y Ctrl+U
+        document.addEventListener('keydown', function (event) {
+            if (event.key === "F12" || (event.ctrlKey && event.shiftKey && (event.key === "I" || event.key === "J")) || (event.ctrlKey && event.key === "U")) {
+                event.preventDefault();
             }
-        }
+        });
 
-        document.addEventListener('DOMContentLoaded', updateLastAccess);
-    })();
+        // Bloquear clic derecho
+        document.addEventListener('contextmenu', function (event) {
+            event.preventDefault();
+        });
     </script>
 </body>
 </html>
